@@ -276,9 +276,10 @@ export default function App() {
         await signOut(auth);
         setError(`ログイン権限がありません (${userEmail})。管理者に許可を依頼してください。`);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Login failed", err);
-      setError("ログインに失敗しました。");
+      const detail = err.code ? `[${err.code}] ${err.message}` : (err.message || "不明なエラー");
+      setError("ログインに失敗しました: " + detail);
     }
   };
 
@@ -490,7 +491,6 @@ export default function App() {
             <div>
               <h1 className="text-lg font-bold tracking-tight text-white flex items-center whitespace-nowrap">
                 Medical Blog Insights
-                <span className="text-[9px] font-normal opacity-40 ml-2 px-1.5 py-0.5 border border-white/20 rounded uppercase tracking-tighter">v2.5</span>
               </h1>
               <p className="text-[10px] text-slate-500">精神科医kyupinブログ Q&A</p>
             </div>
@@ -687,10 +687,13 @@ export default function App() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="bg-blue-600/70 text-red-400 p-5 rounded-2xl flex items-center gap-4 border border-blue-400/50 overflow-hidden shadow-2xl shadow-blue-900/40"
+              className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex items-center gap-3 text-red-400 text-sm mb-8"
             >
-              <AlertCircle className="shrink-0 text-red-500" size={24} />
-              <p className="text-sm font-medium tracking-wide flex-1">{error}</p>
+              <AlertCircle size={18} className="shrink-0" />
+              <p className="flex-1">{error}</p>
+              <button onClick={() => setError(null)} className="text-red-400/50 hover:text-red-400">
+                <X size={18} />
+              </button>
             </motion.div>
           )}
         </AnimatePresence>
