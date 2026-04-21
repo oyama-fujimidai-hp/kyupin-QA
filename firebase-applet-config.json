@@ -1,10 +1,10 @@
 {
-  "projectId": "gen-lang-client-0608869080",
-  "appId": "1:169389254353:web:12dcd3743f4a0583c007f0",
-  "apiKey": "AIzaSyDGRNaWRGnTSaRcYH1KxEn9pMKys7OrRpY",
-  "authDomain": "gen-lang-client-0608869080.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-e3e3dfc3-ad52-4890-b3f4-c227e5ead715",
-  "storageBucket": "gen-lang-client-0608869080.firebasestorage.app",
-  "messagingSenderId": "169389254353",
+  "projectId": "kyupin-qa-assistant-v2",
+  "appId": "1:168681486222:web:a46b95da2e3539ba4fd6df",
+  "apiKey": "AIzaSyBXy6bHb4nJT1v0MSiv5BemvVTe0HrEfpk",
+  "authDomain": "kyupin-qa-assistant-v2.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "kyupin-qa-assistant-v2.firebasestorage.app",
+  "messagingSenderId": "168681486222",
   "measurementId": ""
 }
