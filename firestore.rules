@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 0.1 Global Helpers
+    function isSignedIn() { return request.auth != null; }
+    function isVerified() { 
+      return isSignedIn() 
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in ["yas2x27@gmail.com", "yas2@oyama-fujimidai-hp.com"];
+    }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+
+    // 1. Validation Blueprints
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email', 'createdAt'])
+        && data.keys().size() <= 5
+        && data.uid is string && data.uid == request.auth.uid
+        && data.email is string && data.email.size() <= 256
+        && data.createdAt == request.time;
+    }
+
+    function isValidSearch(data) {
+      return data.keys().hasAll(['userId', 'query', 'answer', 'createdAt'])
+        && data.keys().size() <= 6
+        && data.userId is string && data.userId == request.auth.uid
+        && data.query is string && data.query.size() <= 500
+        && data.answer is string && data.answer.size() <= 10000
+        && data.createdAt == request.time;
+    }
+
+    // 2. Collection Rules
+    
+    // Users Collection
+    match /users/{userId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn() && resource.data.uid == request.auth.uid;
+      allow create: if isVerified() && isValidId(userId) && isValidUser(incoming());
+      allow update: if isVerified() && isOwner(userId) && isValidUser(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt;
+      
+      // Private User Data
+      match /private/profile {
+        allow get, create, update: if isVerified() && isOwner(userId) && isValidUser(incoming());
+      }
+      
+      // Search History
+      match /searches/{searchId} {
+        allow get: if isVerified() && isOwner(userId);
+        allow list: if isVerified() && isOwner(userId);
+        allow create: if isVerified() && isOwner(userId) && isValidId(searchId) && isValidSearch(incoming());
+        allow delete: if isVerified() && isOwner(userId);
+      }
+    }
+  }
+}

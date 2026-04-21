@@ -1,0 +1,6 @@
+{
+  "name": "kyupinブログ Q&A アシスタント",
+  "description": "精神科医kyupinのブログ記事から情報を検索し、回答を提供するAIアシスタント。",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

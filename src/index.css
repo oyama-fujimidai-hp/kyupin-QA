@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", "Helvetica Neue", Arial, sans-serif;
+  --color-bg-dark: #0A0A0C;
+  --color-accent-blue: #60A5FA;
+  
+  --shadow-search-glow: 0 0 15px rgba(59, 130, 246, 0.2);
+  --shadow-glow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply bg-slate-900/40 border border-white/5 backdrop-blur-xl rounded-2xl;
+  }
+}
+
+body {
+  @apply bg-bg-dark text-slate-200;
+}
